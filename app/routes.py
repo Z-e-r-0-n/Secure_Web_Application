@@ -1,37 +1,31 @@
-from flask import render_template, request, redirect, url_for, session
-from app import app
-import app.models as models
+# app/routes.py
+from flask import Blueprint, render_template, session, redirect, url_for
 
-@app.route("/")
+main = Blueprint("main", __name__)
+
+@main.route("/")
 def home():
     return render_template("home.html")
 
-@app.route("/login", methods=["GET", "POST"])
+@main.route("/login", methods=["GET","POST"])
 def login():
-    # TODO: Handle login form
     return render_template("login.html")
 
-@app.route("/register", methods=["GET", "POST"])
+@main.route("/register", methods=["GET","POST"])
 def register():
-    # TODO: Handle registration form
     return render_template("register.html")
 
-@app.route("/profile")
-def profile():
-    # TODO: Show user profile
-    return render_template("profile.html")
-
-@app.route("/forum")
+@main.route("/forum")
 def forum():
-    # TODO: Show forum posts
     return render_template("forum.html")
 
-@app.route("/issues")
+@main.route("/issues")
 def issues():
-    # TODO: Show all issues
+    if not session.get("user_id"):
+        return redirect(url_for("main.login"))
     return render_template("issues.html")
 
-@app.route("/logout")
+@main.route("/logout", methods=["POST","GET"])
 def logout():
-    # TODO: Clear session
-    return redirect(url_for("home"))
+    session.clear()
+    return redirect(url_for("main.home"))
