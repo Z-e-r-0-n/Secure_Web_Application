@@ -40,9 +40,9 @@ def create_issue(user_id, title, content, tags):
         "INSERT INTO issues (user_id, title, content) VALUES (%s, %s, %s)",
         (user_id, title, content)
     )
-    conn.commit()  # fix: commit on the connection
+    conn.commit()  
     cursor.execute("SELECT issue_id FROM issues WHERE user_id = %s AND title = %s", (user_id, title))
-    issue_id = cursor.fetchone()[0]  # tuple fetch
+    issue_id = cursor.fetchone()[0]  
     for i in tags:
         cursor.execute("INSERT INTO tags (issue_id, tag_name) VALUES (%s, %s)", (issue_id, i))
     conn.commit()
