@@ -1,14 +1,24 @@
 body {
     font-family: Arial, sans-serif;
-    margin: 0;
+    margin: 0px;
     padding: 0;
 }
-header nav {
-    background-color: #333;
+header{
+    margin-top: 2px;
+    margin-bottom: 30px;
+    background-color: #3d3d3d;
     padding: 10px;
 }
-header nav a {
+a {
     color: white;
     margin-right: 15px;
     text-decoration: none;
+}
+
+nav{
+    margin-left: 78%;
+}
+
+header nav a:hover {
+    padding:1px;
 }
