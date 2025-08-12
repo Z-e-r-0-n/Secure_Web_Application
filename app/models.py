@@ -1,7 +1,8 @@
 # All DB queries will go here
 # Example placeholders:
-
+cursor=
 def create_user(username, password_hash, email, first_name, last_name):
+
     pass
 
 def check_login(username, password_hash):
