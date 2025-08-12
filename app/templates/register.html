@@ -1,23 +1,46 @@
 {% extends "base.html" %}
 {% block title %}Register{% endblock %}
 {% block content %}
+
+<center>
 <h2>Register</h2>
+<dev class="register">
 <form method="POST">
-    <label for="username">Username:</label>
-    <input type="text" id ="username" name="username" placeholder="Username" required autocomplete="off"><br>
-    <label for="email">Email:</label>
-    <input type="email" id="email" name="email" placeholder="Email" required><br>
-    <label for="first_name">First Name:</label>
-    <input type="text" id="first_name" name="first_name" placeholder="First Name"><br>
-    <label for="last_name">Last Name:</label>
-    <input type="text" id="last_name" name="last_name" placeholder="Last Name"><br>
-    <label for="password">Password:</label>
-    <input type="password" id="password" name="password" placeholder="Password" required autocomplete="off"><br>
-    <button type="submit">Register</button>
+    <table>
+        <tr>
+            <td class="label">Username:</td>
+            <td><input type="text" name="username" required></td>
+        </tr>
+        <tr>
+            <td class="label">Email:</td>
+            <td><input type="email" name="email" required></td>
+        </tr>
+        <tr>
+            <td class="label">First Name:</td>
+            <td><input type="text" name="first_name"></td>
+        </tr>
+        <tr>
+            <td class="label">Last Name:</td>
+            <td><input type="text" name="last_name"></td>
+        </tr>
+        <tr>
+            <td class="label">Password:</td>
+            <td><input type="password" name="password" required></td>
+        </tr>
+    </table>
+<button type="submit">Register</button>
 </form>
+</center>
+<br>
 <center>
     <small>Password must be at least 8 characters and include a number.</small>
 </center>
+</dev>
+
+<center>
+    <small>Already have an account? <a href="{{ url_for('main.login') }}">Login</a></small>
+</center>
+
 {% endblock %}
 
 {% if error %}

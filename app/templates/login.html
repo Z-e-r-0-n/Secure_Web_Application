@@ -1,11 +1,27 @@
 {% extends "base.html" %}
 {% block title %}Login{% endblock %}
 {% block content %}
-<h2>Login</h2>
-<form method="POST">
-    <input type="text" name="username" placeholder="Username" required><br>
-    <input type="password" name="password" placeholder="Password" required><br>
-    <button type="submit">Login</button>
-</form>
+<link rel="stylesheet" href="{{ url_for('static', filename='login.css') }}">
+<center>
+<div class="login">
+    
+    <form method="POST">
+        <table>
+        <tr>
+            <td class="label">Username:</td>
+            <td><input type="text" name="username" required></td>
+        </tr>
+        <tr>
+            <td class="label">Password:</td>
+            <td><input type="password" name="password" required></td>
+        </tr>
+        </table>
+        <button type="submit" class="buton_login">Login</button>
+    </form>
+    
+</div>
+
 <p><a href="{{ url_for('main.register') }}">Register here</a></p>
+</center>
+
 {% endblock %}
