@@ -68,7 +68,7 @@ def logout():
 @main.route("/profile")
 def profile():
     profile=model.get_profile(session.get("user_id"))
-    return render_template("profile.html",username=profile(0), email=profile(1),name=profile(2)+profile(3))
+    return render_template("profile.html",username=profile[0], email=profile[1],name=profile[2]+profile[3])
 
 @main.route("/home")
 def home_alias():
