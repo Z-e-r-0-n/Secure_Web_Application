@@ -83,3 +83,11 @@ def messages():
         return render_template("message.html", error="No messages found.")
     user=session.get("user_id")
     return render_template("message.html", messages=messages,user=user)
+
+@main.route("/friends")
+def friends():
+    if not session.get("user_id"):
+        return redirect(url_for("main.login"))
+    return redirect(url_for("main.friends"))
+    
+

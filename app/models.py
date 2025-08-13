@@ -88,3 +88,12 @@ def get_profile(user_id):
     cursor.execute("SELECT username, email, first_name, last_name FROM users WHERE user_id = %s", (user_id,))
     return cursor.fetchone()
     pass
+
+def friendsr(user1,user2):
+    cursor.execute("Insert into requests (user1,user2,status) values (%s,%s,%s)", (user1, user2,"pending"))
+    conn.commit()
+    pass
+
+def frindsra(user1,user2):
+    cursor.execute("update requests set status ='accepted' where (user1= %s and user2= %s)", (user1,user2))
+    conn.commit()
