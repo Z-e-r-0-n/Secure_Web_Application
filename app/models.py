@@ -3,13 +3,11 @@ import os
 import pymysql
 import pymysql.cursors
 
-# make "cursor" the REAL cursor (so your functions keep working)
 conn = pymysql.connect(
     host=os.getenv("DB_HOST", "localhost"),
     user=os.getenv("DB_USER", "root"),
     password=os.getenv("DB_PASSWORD", ""),
-    database=os.getenv("DB_NAME", "secure_issue_tracker"),
-    # IMPORTANT: no DictCursor -> fetchone() returns a tuple (matches your code)
+    database=os.getenv("DB_NAME", "secure_issue_tracker"),              # IMPORTANT: no DictCursor -> fetchone() returns a tuple (matches your code)
     autocommit=False,
 )
 cursor = conn.cursor()  
@@ -74,4 +72,19 @@ def get_comments(issue_id):
 def get_user_issues(user_id):
     cursor.execute("SELECT * FROM issues WHERE user_id = %s", (user_id,))
     return cursor.fetchall()
+    pass
+
+def insert_message(user1,user2,content):
+    cursor.execute("INSERT INTO messages (user1, user2, content) VALUES (%s, %s, %s)", (user1, user2, content))
+    conn.commit()
+    pass
+
+def get_messages(user1, user2):
+    cursor.execute("SELECT * FROM messages WHERE (user1 = %s AND user2 = %s) OR (user1 = %s AND user2 = %s) ORDER BY timestamp desc limit 10", (user1, user2, user2, user1))
+    return cursor.fetchall()
+    pass
+
+def get_profile(user_id):
+    cursor.execute("SELECT username, email, first_name, last_name FROM users WHERE user_id = %s", (user_id,))
+    return cursor.fetchone()
     pass

@@ -55,6 +55,9 @@ def forum():
 def issues():
     if not session.get("user_id"):
         return redirect(url_for("main.login"))
+    issues=model.get_issues(session.get("user_id"))
+    if not issues:
+        return render_template("issues.html", message="No issues found.")
     return render_template("issues.html")
 
 @main.route("/logout", methods=["POST","GET"])
@@ -64,7 +67,8 @@ def logout():
 
 @main.route("/profile")
 def profile():
-    return render_template("profile.html")
+    profile=model.get_profile(session.get("user_id"))
+    return render_template("profile.html",username=profile(0), email=profile(1),name=profile(2)+profile(3))
 
 @main.route("/home")
 def home_alias():
