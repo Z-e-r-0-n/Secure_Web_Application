@@ -57,7 +57,7 @@ def issues():
         return redirect(url_for("main.login"))
     issues=model.get_issues(session.get("user_id"))
     if not issues:
-        return render_template("issues.html", message="No issues found.")
+        return render_template("issues.html", error="No issues found.")
     return render_template("issues.html")
 
 @main.route("/logout", methods=["POST","GET"])
