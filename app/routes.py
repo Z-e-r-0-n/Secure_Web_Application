@@ -73,3 +73,13 @@ def profile():
 @main.route("/home")
 def home_alias():
     return render_template("home.html")
+
+@main.route("/messages")
+def messages():
+    if not session.get("user_id"):
+        return redirect(url_for("main.login"))
+    messages = model.get_messages(session.get("user_id"),"fixthis")
+    if not messages:
+        return render_template("message.html", error="No messages found.")
+    user=session.get("user_id")
+    return render_template("message.html", messages=messages,user=user)

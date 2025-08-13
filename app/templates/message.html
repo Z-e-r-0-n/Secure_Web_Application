@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Messages{% endblock %}
+{% block content %}
+    {% if error %}
+        <p class="error">{{ error }}</p>
+    {% else %}
+        {% for items in messages %}
+            {% if items[0]==user %}
+                <p style="text-align: right;">{{items[0]}} {{items[2]}}</p>
+            {% else %}
+                <p> {{items[0]}} {{items[2]}}</p>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+{% endblock %}

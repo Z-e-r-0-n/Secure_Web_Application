@@ -80,7 +80,7 @@ def insert_message(user1,user2,content):
     pass
 
 def get_messages(user1, user2):
-    cursor.execute("SELECT * FROM messages WHERE (user1 = %s AND user2 = %s) OR (user1 = %s AND user2 = %s) ORDER BY timestamp desc limit 10", (user1, user2, user2, user1))
+    cursor.execute("SELECT user1,user2,content FROM messages WHERE (user1 = %s AND user2 = %s) OR (user1 = %s AND user2 = %s) ORDER BY timestamp desc limit 10", (user1, user2, user2, user1))
     return cursor.fetchall()
     pass
 
