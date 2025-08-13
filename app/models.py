@@ -6,8 +6,14 @@ import pymysql.cursors
 conn = pymysql.connect(
     host=os.getenv("DB_HOST", "localhost"),
     user=os.getenv("DB_USER", "root"),
+<<<<<<< HEAD
     password=os.getenv("DB_PASSWORD", ""),
     database=os.getenv("DB_NAME", "secure_issue_tracker"),              # IMPORTANT: no DictCursor -> fetchone() returns a tuple (matches your code)
+=======
+    password=os.getenv("DB_PASSWORD", "root"),
+    database=os.getenv("DB_NAME", "secure_issue_tracker"),
+    # IMPORTANT: no DictCursor -> fetchone() returns a tuple (matches your code)
+>>>>>>> 05c0f1c337f5a8d020cded6015281d78e7b3d029
     autocommit=False,
 )
 cursor = conn.cursor()  
