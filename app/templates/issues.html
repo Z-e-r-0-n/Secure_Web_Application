@@ -7,5 +7,9 @@
 {% if error %}
     <p class="error">{{ error }}</p>
  {% else %}
-    <h1> {{issue1}}</h1>
+    <ul>
+        {% for issue in issues %}
+            <h1> {{ issue[1] }}</h1>
+        {% endfor %}
+    <h1> {{issue}}</h1>
 {% endblock %}

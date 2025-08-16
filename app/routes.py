@@ -58,7 +58,7 @@ def issues():
     issues=model.get_issues(session.get("user_id"))
     if not issues:
         return render_template("issues.html", error="No issues found.")
-    return render_template("issues.html")
+    return render_template("issues.html",issues=issues)
 
 @main.route("/logout", methods=["POST","GET"])
 def logout():

@@ -47,7 +47,7 @@ def create_issue(user_id, title, content, tags):
     pass
 
 def get_issues(user_id):
-    cursor.execute("SELECT * FROM issues WHERE user_id = %s", (user_id,))
+    cursor.execute("SELECT title,content,created_at FROM issues WHERE user_id in (select user_id from users where username = %s)", (user_id,))
     return cursor.fetchall()
     pass
 
@@ -70,7 +70,7 @@ def get_comments(issue_id):
     pass
 
 def get_user_issues(user_id):
-    cursor.execute("SELECT * FROM issues WHERE user_id = %s", (user_id,))
+    cursor.execute("SELECT user FROM issues WHERE user_id = %s", (user_id,))
     return cursor.fetchall()
     pass
 
@@ -97,3 +97,14 @@ def friendsr(user1,user2):
 def frindsra(user1,user2):
     cursor.execute("update requests set status ='accepted' where (user1= %s and user2= %s)", (user1,user2))
     conn.commit()
+
+def friendsch(user1,user2):
+        cursor.execute("select * from requests where (user1= %s and user2 = %s) or (user1= %s and user2=%s)",(user1,user2,user2,user1))
+        if (cursor.fetchone()):
+            return (True)
+        else:
+            return(False)
+
+
+
+
