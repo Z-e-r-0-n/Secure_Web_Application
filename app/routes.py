@@ -55,10 +55,16 @@ def forum():
 def issues():
     if not session.get("user_id"):
         return redirect(url_for("main.login"))
-    issues=model.get_issues(session.get("user_id"))
+    user_id = session.get("user_id")
+    tag = request.args.get("tag")
+    tags = model.get_tags_for_user(user_id)
+    if tag:
+        issues = model.get_issues_by_tag_for_user(user_id, tag)
+    else:
+        issues = model.get_issues(user_id)
     if not issues:
-        return render_template("issues.html", error="No issues found.")
-    return render_template("issues.html",issues=issues)
+        return render_template("issues.html", error="No issues found.", tags=tags)
+    return render_template("issues.html", issues=issues, tags=tags, selected_tag=tag)
 
 @main.route("/logout", methods=["POST","GET"])
 def logout():
@@ -89,5 +95,11 @@ def friends():
     if not session.get("user_id"):
         return redirect(url_for("main.login"))
     return redirect(url_for("main.friends"))
+
+@main.route("/issue/<int:issue_id>")
+def issue_detail(issue_id):
+    issue = model.get_issue_by_id(issue_id)
+    comments = model.get_comments(issue_id)
+    return render_template("issue_detail.html", issue=issue, comments=comments)
     
 

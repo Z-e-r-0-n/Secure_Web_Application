@@ -2,14 +2,32 @@
 {% block title %}Issues{% endblock %}
 {% block content %}
 <h2>Issues</h2>
-<p>
-</p>
+
+
+<div>
+  <strong>Filter by tag:</strong>
+  <a href="{{ url_for('main.issues') }}">All</a>
+  {% for tag in tags %}
+    <a href="{{ url_for('main.issues', tag=tag) }}"
+       {% if tag == selected_tag %}style="font-weight:bold;"{% endif %}>
+      {{ tag }}
+    </a>
+  {% endfor %}
+</div>
+<hr>
+
 {% if error %}
-    <p class="error">{{ error }}</p>
- {% else %}
-    <ul>
-        {% for issue in issues %}
-            <h1> {{ issue[1] }}</h1>
-        {% endfor %}
-    <h1> {{issue}}</h1>
+  <p class="error">{{ error }}</p>
+{% else %}
+  {% for issue in issues %}
+    <div class="issue">
+      <h3>{{ issue[1] }}</h3>
+      <p>{{ issue[2] }}</p>
+      <small>Created at: {{ issue[3] }}</small>
+      <br>
+      <a href="{{ url_for('main.issue_detail', issue_id=issue[0]) }}">Expand</a>
+    </div>
+    <hr>
+  {% endfor %}
+{% endif %}
 {% endblock %}
