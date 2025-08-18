@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Post Issue{% endblock %}
+{% block content %}
+<h2>Post a New Issue</h2>
+
+<form method="POST" action="{{ url_for('main.post_issue') }}">
+  <p>Title:<br><input name="title" required></p>
+  <p>Content:<br><textarea name="content"></textarea></p>
+
+  <p>Tags (choose up to {{ max_tags }}):</p>
+  {% for t in allowed_tags %}
+    <label>
+      <input type="checkbox" name="tags" value="{{ t }}"> {{ t }}
+    </label>
+  {% endfor %}
+
+  <p><button type="submit">Create</button></p>
+</form>
+{% endblock %}

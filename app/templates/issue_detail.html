@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Issue{% endblock %}
+{% block content %}
+  {% if issue %}
+    <h2>{{ issue[1] }}</h2>
+    <p>{{ issue[2] }}</p>
+    <small>Created at: {{ issue[3] }}</small>
+
+    <hr>
+    <h3>Comments</h3>
+    {% if comments and comments|length > 0 %}
+      <ul>
+        {% for c in comments %}
+          <li>
+            <div><small>On {{ c[3] }} by user_id {{ c[2] }}</small></div>
+            <div>{{ c[4] }}</div>
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p><em>No comments yet.</em></p>
+    {% endif %}
+  {% else %}
+    <p class="error">Issue not found.</p>
+  {% endif %}
+{% endblock %}

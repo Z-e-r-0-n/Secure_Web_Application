@@ -101,5 +101,36 @@ def issue_detail(issue_id):
     issue = model.get_issue_by_id(issue_id)
     comments = model.get_comments(issue_id)
     return render_template("issue_detail.html", issue=issue, comments=comments)
+
+ALLOWED_TAGS = ["bug", "feature", "ui", "backend", "security", "docs", "helpwanted"]# needs extending do when sai is fine i guess
+MAX_TAGS = 3
+
+@main.route("/post", methods=["GET", "POST"])
+def post_issue():
+    if not session.get("user_id"):
+        return redirect(url_for("main.login"))
+
+    if request.method == "POST":
+        user_id = session["user_id"]
+        title   = request.form["title"].strip()
+        content = request.form["content"].strip()
+        selected = request.form.getlist("tags")
+
+        # cap set to 3 for now change if you want bot
+        tags = []
+        for t in selected:
+            t_norm = t.strip().lower()
+            if t_norm in ALLOWED_TAGS and t_norm not in tags:
+                tags.append(t_norm)
+            if len(tags) == MAX_TAGS:
+                break
+
+        model.create_issue(user_id, title, content, tags)
+        return redirect(url_for("main.issues"))
+
+    return render_template("post.html", allowed_tags=ALLOWED_TAGS, max_tags=MAX_TAGS)
+    
+    
+
     
 
