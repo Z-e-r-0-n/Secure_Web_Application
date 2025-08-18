@@ -4,23 +4,42 @@
     margin-top: 100px;
     padding: 30px;
     padding-top: 30px ;
-    background-color: #333;
-    border-radius: 3px;
+    background-color: #18181882;
+    border-radius: 10px;
 
 }
 
 .button_login{
     width: 35%;
     padding: 5px;
-    background-color: #4CAF50;
-    color: white;
+    color:#ffffff;
     border: none;
-    border-radius: 3px;
-    cursor: pointer;    
+    border-radius: 5px;
+    cursor: pointer; 
+    background-color: #3d3d3d;
+      
 }
 
 h1{
-    color: white;
+    color: #000000;
     text-align: center;
     margin: 10px;
 }
+
+.button_login:hover{
+     background-color: #4CAF50;
+     color: white;
+     transform: scale(1.08);
+     transition: all 0.2s ease;
+}
+
+body {
+    background-image: url("img_bg.jpg");
+    background-repeat: no-repeat;  
+    background-size:auto;         
+    background-position:unset;  
+}
+
+input::placeholder {
+    color: rgb(21, 21, 21);
+  }

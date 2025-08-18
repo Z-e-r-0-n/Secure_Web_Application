@@ -3,27 +3,27 @@
 {% block content %}
 <link rel="stylesheet" href="{{ url_for('static', filename='login.css') }}">
 <center>
-<div class="login">
-    <h1>Login</h1>
+<div class="login" >
+    <h1 style="color: #f4f4f4;">LOGIN</h1>
     <form method="POST">
-        <table>
+        <table style="border-collapse: separate; border-spacing: 0 10px;">
         <tr>
-            <td class="label">Username:</td>
-            <td><input type="text" name="username" required></td>
+            <td class="label" style="color:black"></td>
+            <td><input type="text" placeholder="Username" name="username" required style="padding:12px; border-radius:7px; background-color: #e6e6e6;"></td>
         </tr>
         <tr>
-            <td class="label">Password:</td>
-            <td><input type="password" name="password" required></td>
+            <td class="label" style="color:black"></td>
+            <td><input type="password" placeholder="Password" name="password" required style="padding:12px; border-radius:7px; background-color: #e6e6e6; "></td>  
         </tr>
         </table>
         <button type="submit" class="button_login">Login</button>
     </form>
+    <br>
+    <small style="color: #e6e6e6;">Don't have an account? <a href="{{ url_for('main.register') }}"><u>Register here</u></a></small>
     {% if error %}<p class="error">{{ error }}</p>{% endif %}
     
 </div>
 
-<br>
-<small>Don't have a account? <a href="{{ url_for('main.register') }}"><u>Register here</u></a></small>
 </center>
 
 {% endblock %}
