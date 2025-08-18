@@ -1,10 +1,12 @@
 body {
     font-family: Arial, sans-serif;
     margin: 0px;
-    padding: 0;
+    background: #0b0b0c;
+    color: #e7e7ea;
+    font: 14px/1.5 system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
 }
-header{
-    margin-top: 2px;
+
+nav {
     margin-bottom: 30px;
     background-color: #ae3939;
     padding: 10px;
@@ -15,10 +17,8 @@ a {
     text-decoration: none;
 }
 
-nav{
-    margin-left: 78%;
-}
-
-header nav a:hover {
-    padding:1px;
+nav a:hover {
+    padding: 5px;
+    background-color: #b0b0b082;
+    transform: scale(1.03);
 }
