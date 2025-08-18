@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
   <title>{% block title %}Secure Issue Tracker{% endblock %}</title>
@@ -7,33 +8,26 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 
+<body>
 
-<body class="app">
-  <header class="site-header">
-    <nav class="nav">
-      <a class="nav__brand" href="{{ url_for('main.home') }}">Secure Issue Tracker</a>
-
-
-      <div class="nav__links">
-        <a href="{{ url_for('main.home') }}">Home</a>
-        {% if session.get('user_id') %}
-          <a href="{{ url_for('main.profile') }}">Profile</a>
-          <a href="{{ url_for('main.forum') }}">Forum</a>
-
-          <a href="{{ url_for('main.issues') }}">Issues</a>
-
-          <a href="{{ url_for('main.messages') }}">Messages</a>
-          <a href="{{ url_for('main.friends') }}">Friends</a>
-          <a href="{{ url_for('main.logout') }}">Logout</a>
-        {% else %}
-          <a href="{{ url_for('main.login') }}">Login</a>
-        {% endif %}
-      </div>
-    </nav>
-  </header>
+  <nav>
+    <a  href="{{ url_for('main.home') }}"> Issue Tracker</a>
+    {% if session.get('user_id') %}
+    <a  href="{{ url_for('main.profile') }}">Profile</a>
+    <a  href="{{ url_for('main.forum') }}">Forum</a>
+    <a  href="{{ url_for('main.issues') }}">Issues</a>
+    <a  href="{{ url_for('main.messages') }}">Messages</a>
+    <a  href="{{ url_for('main.friends') }}">Friends</a>
+    <a  href="{{ url_for('main.logout') }}">Logout</a>
+    {% else %}
+    <a  href="{{ url_for('main.login') }}">Login</a>
+    {% endif %}
+  </nav>
 
   <main class="content">
     {% block content %}{% endblock %}
   </main>
+
 </body>
+
 </html>
