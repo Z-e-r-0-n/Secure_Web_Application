@@ -7,20 +7,6 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 
-<body style="color: white;background-color: black;">
-    <header>
-        <nav>
-            <a href="{{ url_for('main.home') }}">Home</a>
-            {% if session.get('logged_in') %}
-                <a href="{{ url_for('main.profile') }}" class="header_profile">Profile</a>
-                <a href="{{ url_for('main.forum') }}" class="header_forum">Forum</a>
-                <a href="{{ url_for('main.issues') }}" class="header_issues">Issues</a>
-                <a href="{{ url_for('main.logout') }}" class="header_logout">Logout</a>
-            {% else %}
-                <a href="{{ url_for('main.login') }}" class="header_login">Login</a>
-            {% endif %}
-        </nav>
-    </header>
 
 <body class="app">
   <header class="site-header">
