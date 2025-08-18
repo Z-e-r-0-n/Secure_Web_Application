@@ -55,10 +55,16 @@ def forum():
 def issues():
     if not session.get("user_id"):
         return redirect(url_for("main.login"))
-    issues=model.get_issues(session.get("user_id"))
+    user_id = session.get("user_id")
+    tag = request.args.get("tag")
+    tags = model.get_tags_for_user(user_id)
+    if tag:
+        issues = model.get_issues_by_tag_for_user(user_id, tag)
+    else:
+        issues = model.get_issues(user_id)
     if not issues:
-        return render_template("issues.html", message="No issues found.")
-    return render_template("issues.html")
+        return render_template("issues.html", error="No issues found.", tags=tags)
+    return render_template("issues.html", issues=issues, tags=tags, selected_tag=tag)
 
 @main.route("/logout", methods=["POST","GET"])
 def logout():
@@ -73,3 +79,58 @@ def profile():
 @main.route("/home")
 def home_alias():
     return render_template("home.html")
+
+@main.route("/messages")
+def messages():
+    if not session.get("user_id"):
+        return redirect(url_for("main.login"))
+    messages = model.get_messages(session.get("user_id"),"fixthis")
+    if not messages:
+        return render_template("message.html", error="No messages found.")
+    user=session.get("user_id")
+    return render_template("message.html", messages=messages,user=user)
+
+@main.route("/friends")
+def friends():
+    if not session.get("user_id"):
+        return redirect(url_for("main.login"))
+    return redirect(url_for("main.friends"))
+
+@main.route("/issue/<int:issue_id>")
+def issue_detail(issue_id):
+    issue = model.get_issue_by_id(issue_id)
+    comments = model.get_comments(issue_id)
+    return render_template("issue_detail.html", issue=issue, comments=comments)
+
+ALLOWED_TAGS = ["bug", "feature", "ui", "backend", "security", "docs", "helpwanted"]# needs extending do when sai is fine i guess
+MAX_TAGS = 3
+
+@main.route("/post", methods=["GET", "POST"])
+def post_issue():
+    if not session.get("user_id"):
+        return redirect(url_for("main.login"))
+
+    if request.method == "POST":
+        user_id = session["user_id"]
+        title   = request.form["title"].strip()
+        content = request.form["content"].strip()
+        selected = request.form.getlist("tags")
+
+        # cap set to 3 for now change if you want bot
+        tags = []
+        for t in selected:
+            t_norm = t.strip().lower()
+            if t_norm in ALLOWED_TAGS and t_norm not in tags:
+                tags.append(t_norm)
+            if len(tags) == MAX_TAGS:
+                break
+
+        model.create_issue(user_id, title, content, tags)
+        return redirect(url_for("main.issues"))
+
+    return render_template("post.html", allowed_tags=ALLOWED_TAGS, max_tags=MAX_TAGS)
+    
+    
+
+    
+
