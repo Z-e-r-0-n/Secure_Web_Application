@@ -21,10 +21,13 @@ nav a {
     color: white;
     margin-right: 15px;
     text-decoration: none;
+    padding:4px;
+    border-radius: 5px;
 }
 
 nav a:hover {
-    padding: 5px;
-    background-color: #b0b0b082;
-    transform: scale(1.03);
+    color: black;
+    background-color: #fffffff5;
+    transform: scale(1.165);
+    transition-duration:100ms ;
 }

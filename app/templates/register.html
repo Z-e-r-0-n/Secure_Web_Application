@@ -2,48 +2,55 @@
 {% block title %}Register{% endblock %}
 {% block content %}
 {% if error %}
-    <p class="error">{{ error }}</p>
-    {% else %}
+<p class="error">{{ error }}</p>
+{% else %}
+<link rel="stylesheet" href="{{ url_for('static', filename='register.css') }}">
 <center>
-<h2>Register</h2>
-<div class="register">
-<form method="POST">
-    <table>
-        <tr>
-            <td class="label">Username:</td>
-            <td><input type="text" name="username" required></td>
-        </tr>
-        <tr>
-            <td class="label">Email:</td>
-            <td><input type="email" name="email" required></td>
-        </tr>
-        <tr>
-            <td class="label">First Name:</td>
-            <td><input type="text" name="first_name"></td>
-        </tr>
-        <tr>
-            <td class="label">Last Name:</td>
-            <td><input type="text" name="last_name"></td>
-        </tr>
-        <tr>
-            <td class="label">Password:</td>
-            <td><input type="password" name="password" required></td>
-        </tr>
-    </table>
-<button type="submit">Register</button>
-</form>
-</center>
-<br>
-<center>
-    <small>Password must be at least 8 characters and include a number.</small>
-</center>
-</div>
+    <div class="register">
+        <h2 style="color: #f4f4f4;">Register</h2>
+        <form method="POST">
+            <table style="border-collapse: separate; border-spacing: 0 10px;">
+                <tr>
+                    <td class="label">Username:</td>
+                    <td><input type="text" name="username" required
+                            style="padding:12px; border-radius:7px; background-color: #e6e6e6;"></td>
+                </tr>
+                <tr>
+                    <td class="label">Email:</td>
+                    <td><input type="email" name="email" required
+                            style="padding:12px; border-radius:7px; background-color: #e6e6e6;"></td>
+                </tr>
+                <tr>
+                    <td class="label">First Name:</td>
+                    <td><input type="text" name="first_name"
+                            style="padding:12px; border-radius:7px; background-color: #e6e6e6;"></td>
+                </tr>
+                <tr>
+                    <td class="label">Last Name:</td>
+                    <td><input type="text" name="last_name"
+                            style="padding:12px; border-radius:7px; background-color: #e6e6e6;"></td>
+                </tr>
+                <tr>
+                    <td class="label">Password:</td>
+                    <td><input type="password" name="password" required
+                            style="padding:12px; border-radius:7px; background-color: #e6e6e6;"></td>
+                </tr>
+            </table>
+            <button type="submit" class="button_register">Register</button>
+        </form>
 
-<center>
-    <small>Already have an account? <a href="{{ url_for('main.login') }}">Login</a></small>
-    
+        <br>
+        <center>
+            <small>Password must be at least 8 characters and include a number.</small>
+        </center>
+
+
+
+        <center>
+            <small style="color: #e6e6e6;">Already have an account? <a href="{{ url_for('main.login') }}"
+                    style="color: #e6e6e6;">Login</a></small>
+        </center>
+    </div>
 </center>
 {% endif %}
 {% endblock %}
-
-
