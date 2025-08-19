@@ -1,31 +1,37 @@
 
-.login{
+
+.register{
     width: 300px;
-    margin-top: 100px;
     padding: 30px;
     padding-top: 30px ;
-    background-color: #18181882;
+    background-color: #181818a0;
     border-radius: 10px;
-
 }
 
-.button_login{
+label{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.button_register{
     width: 60%;
-    padding: 10px;
+    padding: 8px;
     color:#ffffff;
     border: none;
     border-radius: 5px;
     cursor: pointer; 
     background-color: #3d3d3d;
+    margin-top: 20px;  
 }
 
-h1{
+h2{
     color: #000000;
     text-align: center;
     margin: 10px;
 }
 
-.button_login:hover{
+.button_register:hover{
      background-color: #4CAF50;
      color: white;
      transform: scale(1.08);
@@ -37,12 +43,19 @@ body {
     background-repeat: no-repeat;  
     background-size:auto;         
     background-position:unset;  
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 input::placeholder {
-    color: rgb(27, 27, 27);
+    color: rgb(30, 30, 30);
 }
 
 form{
-    line-height: 3;
+    line-height: 2.8;
 }
+
+input[type=text], input[type=password] {
+  width: 90%;
+  border: none;
+}
+
