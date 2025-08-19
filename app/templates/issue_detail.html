@@ -1,6 +1,16 @@
 {% extends "base.html" %}
 {% block title %}Issue{% endblock %}
 {% block content %}
+{% if not is_owner %}
+      {% if session.get('user_id') %}
+        <form method="POST" action="{{ url_for('main.add_comment_route', issue_id=issue[0]) }}">
+          <textarea name="content" required></textarea><br>
+          <button type="submit">Comment</button>
+        </form>
+{% endif %}
+{% endif %}
+
+
   {% if issue %}
     <h2>{{ issue[1] }}</h2>
     <p>{{ issue[2] }}</p>

@@ -8,8 +8,10 @@ body {
 
 nav {
     margin-bottom: 30px;
-    background-color: #ae3939;
+    background-color: #0c0c0ca8;
     padding: 10px;
+    display : flex;
+    justify-content: flex-end;
 }
 a {
     color: rgb(69, 10, 10);

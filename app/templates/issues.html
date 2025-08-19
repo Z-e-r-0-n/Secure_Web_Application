@@ -1,37 +1,66 @@
 {% extends "base.html" %}
 {% block title %}Issues{% endblock %}
 {% block content %}
-<h2>Issues</h2>
+
+{% set is_forum = (mode == 'forum') %}
+{% set endpoint = 'main.forum' if is_forum else 'main.issues' %}
+
+{% if is_forum %}
+  <h2>Forum — Latest 10 Issues</h2>
+
+  <form method="GET" action="{{ url_for('main.forum') }}" style="text-align:right;">
+    <input type="text" name="q" value="{{ q or '' }}" placeholder="Search title/content">
+    <button type="submit">Search</button>
+  </form>
+{% else %}
+  <h2>Issues</h2>
+{% endif %}
 
 <p>
-  <a href="{{ url_for('main.post_issue') }}"> Post a New Issue</a>
-</p>
+    <a href="{{ url_for('main.post_issue') }}"> Post a New Issue</a>
+  </p>
 
-
-<div>
+<div style="margin: 10px 0;">
   <strong>Filter by tag:</strong>
-  <a href="{{ url_for('main.issues') }}">All</a>
+  <a href="{{ url_for(endpoint) }}">All</a>
   {% for tag in tags %}
-    <a href="{{ url_for('main.issues', tag=tag) }}"
+    <a href="{{ url_for(endpoint, tag=tag) }}"
        {% if tag == selected_tag %}style="font-weight:bold;"{% endif %}>
       {{ tag }}
     </a>
   {% endfor %}
 </div>
+
 <hr>
 
 {% if error %}
   <p class="error">{{ error }}</p>
 {% else %}
-  {% for issue in issues %}
-    <div class="issue">
-      <h3>{{ issue[1] }}</h3>
-      <p>{{ issue[2] }}</p>
-      <small>Created at: {{ issue[3] }}</small>
-      <br>
-      <a href="{{ url_for('main.issue_detail', issue_id=issue[0]) }}">Expand</a>
-    </div>
-    <hr>
-  {% endfor %}
+  <!-- scrollable container -->
+  <div style="
+        max-height: 400px; 
+        overflow-y: auto; 
+        border: 1px solid #555; 
+        padding: 10px; 
+        border-radius: 8px;
+        background-color: #1e1e1e;
+    ">
+    {% for issue in issues %}
+      <div style="
+            background-color: #2a2a2a; 
+            padding: 12px; 
+            margin-bottom: 10px; 
+            border-radius: 6px; 
+            box-shadow: 0 2px 4px rgba(0,0,0,0.4);
+        ">
+        <h3 style="margin: 0 0 5px 0;">{{ issue[1] }}</h3>
+        <p style="margin: 0 0 5px 0;">{{ issue[2] }}</p>
+        <small style="color: #aaa;">Created at: {{ issue[3] }}</small>
+        <br>
+        <a href="{{ url_for('main.issue_detail', issue_id=issue[0]) }}" style="color:#4da6ff;">Expand</a>
+      </div>
+    {% endfor %}
+  </div>
 {% endif %}
+
 {% endblock %}

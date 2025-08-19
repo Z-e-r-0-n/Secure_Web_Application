@@ -47,9 +47,7 @@ def register():
                 error = "Registration failed."
     return render_template("register.html", error=error)
 
-@main.route("/forum")
-def forum():
-    return render_template("forum.html")
+
 
 @main.route("/issues")
 def issues():
@@ -100,7 +98,9 @@ def friends():
 def issue_detail(issue_id):
     issue = model.get_issue_by_id(issue_id)
     comments = model.get_comments(issue_id)
-    return render_template("issue_detail.html", issue=issue, comments=comments)
+    viewer_id = session.get("user_id")
+    is_owner = bool(issue and viewer_id == issue[4])
+    return render_template("issue_detail.html", issue=issue, comments=comments,is_owner=is_owner)
 
 ALLOWED_TAGS = ["bug", "feature", "ui", "backend", "security", "docs", "helpwanted"]# needs extending do when sai is fine i guess
 MAX_TAGS = 3
@@ -129,6 +129,56 @@ def post_issue():
         return redirect(url_for("main.issues"))
 
     return render_template("post.html", allowed_tags=ALLOWED_TAGS, max_tags=MAX_TAGS)
+
+@main.route("/forum")
+def forum():
+    if not session.get("user_id"):
+        return redirect(url_for("main.login"))
+    q   = (request.args.get("q") or "").strip()
+    tag = request.args.get("tag")
+
+    tags = model.get_all_tags_global()#add a list here fine for now i guess
+
+    if q:
+        issues = model.search_recent_issues_global(q, limit=10)
+    elif tag:
+        issues = model.idkwhattoname(tag, 10)  # returns (issue_id, title, content, created_at)
+    else:
+        issues = model.get_global_issues(limit=10)
+
+    if not issues:
+        return render_template("issues.html",
+                               error="No issues yet.",
+                               tags=tags,
+                               selected_tag=tag,
+                               mode="forum",
+                               q=q)
+
+    return render_template("issues.html",
+                           issues=issues,
+                           tags=tags,
+                           selected_tag=tag,
+                           mode="forum",
+                           q=q)
+
+@main.route("/issue/<int:issue_id>/comment", methods=["POST"])
+def add_comment_route(issue_id):
+    if not session.get("user_id"):
+        return redirect(url_for("main.login"))
+
+    issue = model.get_issue_by_id(issue_id)
+    if not issue:
+        return redirect(url_for("main.forum")) 
+
+    # double checking i  guess review karo
+    if session["user_id"] == issue[4]:
+        return redirect(url_for("main.issue_detail", issue_id=issue_id))
+
+    content = (request.form.get("content") or "").strip()
+    if content:
+        model.add_comment(issue_id, session["user_id"], content)
+
+    return redirect(url_for("main.issue_detail", issue_id=issue_id))
     
     
 

@@ -50,20 +50,20 @@ def get_userid(username):
     return cursor.fetchone()
 
 def get_issues(user_id):
-    cursor.execute("SELECT issue_id, title, content, created_at FROM issues WHERE user_id = %s", (user_id,))
+    cursor.execute("SELECT issue_id, title, content, created_at FROM issues WHERE user_id = %s  ORDER BY created_at DESC, issue_id DESC", (user_id,))
     return cursor.fetchall()
 
-# Get all tags for a user (distinct tags from their issues)
+# check
 def get_tags_for_user(user_id):
     cursor.execute("SELECT DISTINCT tag_name FROM tags WHERE issue_id IN (SELECT issue_id FROM issues WHERE user_id = %s)", (user_id,))
     return [row[0] for row in cursor.fetchall()]
 
-# Get issues for a user filtered by tag
+# check
 def get_issues_by_tag_for_user(user_id, tag_name):
-    cursor.execute("SELECT i.issue_id, i.title, i.content, i.created_at FROM issues i JOIN tags t ON i.issue_id = t.issue_id WHERE i.user_id = %s AND t.tag_name = %s", (user_id, tag_name))
+    cursor.execute("SELECT i.issue_id, i.title, i.content, i.created_at FROM issues i JOIN tags t ON i.issue_id = t.issue_id WHERE i.user_id = %s AND t.tag_name = %s ORDER BY i.created_at DESC, i.issue_id DESC", (user_id, tag_name))
     return cursor.fetchall()
 
-# Get a single issue by id
+# check
 def get_issue_by_id(issue_id):
     cursor.execute("SELECT issue_id, title, content, created_at, user_id FROM issues WHERE issue_id = %s", (issue_id,))
     return cursor.fetchone()
@@ -72,11 +72,6 @@ def get_issues_by_tag(tag_name):
     cursor.execute("SELECT * FROM issues WHERE issue_id IN (SELECT issue_id FROM tags WHERE tag_name = %s)", (tag_name,))
     return cursor.fetchall()
     pass
-
-def get_isues_specificu(tag_name, user_id):
-    cursor.execute("SELECT * FROM issues WHERE issue_id IN (SELECT issue_id FROM tags WHERE tag_name = %s AND user_id = %s)", (tag_name, user_id))
-    return cursor.fetchall()
-
 
 def add_comment(issue_id, user_id, content):
     cursor.execute(
@@ -88,11 +83,6 @@ def add_comment(issue_id, user_id, content):
 
 def get_comments(issue_id):
     cursor.execute("SELECT * FROM comments WHERE issue_id = %s", (issue_id,))
-    return cursor.fetchall()
-    pass
-
-def get_user_issues(user_id):
-    cursor.execute("SELECT user FROM issues WHERE user_id = %s", (user_id,))
     return cursor.fetchall()
     pass
 
@@ -126,9 +116,35 @@ def friendsch(user1,user2):
             return (True)
         else:
             return(False)
-        
 
+def get_all_tags_global():
+    cursor.execute("SELECT DISTINCT tag_name FROM tags ORDER BY tag_name")
+    return [r[0] for r in cursor.fetchall()]
 
+#check 
+def search_recent_issues_global(q, limit=10):
+    like = f"%{q}%"
+    cursor.execute("""
+        SELECT issue_id, title, content, created_at
+        FROM issues
+        WHERE title LIKE %s OR content LIKE %s
+        ORDER BY created_at DESC, issue_id DESC
+        LIMIT %s
+    """, (like, like, limit))
+    return cursor.fetchall()
+
+def get_global_issues(limit=10):
+    cursor.execute("""
+        select issue_id, title, content, created_at
+        FROM issues
+        ORDER BY created_at DESC, issue_id DESC
+        LIMIT %s
+    """, (limit,))
+    return cursor.fetchall()
+
+def idkwhattoname( tag_name,limit=10):
+    cursor.execute("SELECT i.issue_id, i.title, i.content, i.created_at FROM issues i JOIN tags t ON i.issue_id = t.issue_id WHERE t.tag_name = %s Limit %s", (tag_name , limit, ))
+    return cursor.fetchall()
 
 
 
