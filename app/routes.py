@@ -88,11 +88,7 @@ def messages():
     user=session.get("user_id")
     return render_template("message.html", messages=messages,user=user)
 
-@main.route("/friends")
-def friends():
-    if not session.get("user_id"):
-        return redirect(url_for("main.login"))
-    return redirect(url_for("main.friends"))
+
 
 @main.route("/issue/<int:issue_id>")
 def issue_detail(issue_id):
@@ -179,8 +175,74 @@ def add_comment_route(issue_id):
         model.add_comment(issue_id, session["user_id"], content)
 
     return redirect(url_for("main.issue_detail", issue_id=issue_id))
-    
-    
 
-    
 
+
+@main.route("/friends", methods=["GET"])
+def friends():
+    if not session.get("user_id"):
+        return redirect(url_for("main.login"))
+
+    user_id = session["user_id"]
+    me = model.get_username_by_id(user_id)
+
+    q = (request.args.get("q") or "").strip()
+    users = []
+    if q:
+        users = model.search_users(q, exclude_username=me)
+
+    friends = model.friendse(me)
+    pending_out = model.requests(me)
+    pending_in = model.requests_in(me)
+
+    return render_template(
+        "friends.html",
+        q=q,
+        users=users,
+        friends=friends,
+        pending_out=pending_out,
+        pending_in=pending_in,
+    )
+
+@main.route("/friends/request/<username>", methods=["POST"])
+def friends_request(username):
+    if not session.get("user_id"):
+        return redirect(url_for("main.login"))
+    me = model.get_username_by_id(session["user_id"])
+    if not me or me == username:
+        return redirect(url_for("main.friends"))
+    if not model.friendsch(me, username):
+        model.friendsr(me, username)
+    return redirect(url_for("main.friends"))
+
+@main.route("/friends/accept/<from_username>", methods=["POST"])
+def friends_accept(from_username):
+    if not session.get("user_id"):
+        return redirect(url_for("main.login"))
+    me = model.get_username_by_id(session["user_id"])
+    model.friendsra(from_username, me)  # fixed spelling
+    return redirect(url_for("main.friends"))
+
+@main.route("/friends/decline/<from_username>", methods=["POST"])
+def friends_decline(from_username):
+    if not session.get("user_id"):
+        return redirect(url_for("main.login"))
+    me = model.get_username_by_id(session["user_id"])
+    model.friends_decline(from_username, me)
+    return redirect(url_for("main.friends"))
+
+@main.route("/friends/cancel/<to_username>", methods=["POST"])
+def friends_cancel(to_username):
+    if not session.get("user_id"):
+        return redirect(url_for("main.login"))
+    me = model.get_username_by_id(session["user_id"])
+    model.friends_cancel(me, to_username)
+    return redirect(url_for("main.friends"))
+
+@main.route("/friends/remove/<username>", methods=["POST"])
+def friends_remove(username):
+    if not session.get("user_id"):
+        return redirect(url_for("main.login"))
+    me = model.get_username_by_id(session["user_id"])
+    model.friends_remove(me, username)
+    return redirect(url_for("main.friends"))

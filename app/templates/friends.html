@@ -1,31 +1,109 @@
 {% extends "base.html" %}
-{% block title %}friends{% endblock %}
+{% block title %}Friends{% endblock %}
 {% block content %}
-<forum method="post" action ="{{ url_for('main.search_friends') }}">
-   <input type="text" name="search" placeholder="Search for friends...">
-   <button type="submit">Search</button>
-</forum>
+
+<h2>Friends</h2>
+
+<form method="GET" action="{{ url_for('main.friends') }}" style="margin-bottom:10px;">
+  <input type="text" name="q" value="{{ q or '' }}" placeholder="Search for friends...">
+  <button type="submit">Search</button>
+</form>
+
 {% if users %}
-    <h2>users List</h2>
-    <ul>
-        {% for user in users %}
-            <li>
-                {{ user.username }} 
-                {% if user.is_friend %}
-                    <form method="POST" action="{{ url_for('main.remove_friend', friend_id=user.id) }}">
-                        <button type="submit">Remove Friend</button>
-                    </form>
-                  {% elif user.is_pending %}
-                    <form method="POST" action="{{ url_for('main.cancel_friend_request', friend_id=user.id) }}">
-                        <button type="submit">Cancel Request</button>
-                    </form>
-                {% else %}
-                    <form method="POST" action="{{ url_for('main.add_friend', friend_id=user.id) }}">
-                        <button type="submit">Add Friend</button>
-                    </form>
-                {% endif %}
-            </li>
-        {% endfor %}
-    </ul>
+  <h3>Search Results</h3>
+  <ul>
+    {% for uname in users %}
+      <li>
+        {{ uname }}
+
+        {% if uname in friends %}
+          <form method="POST" action="{{ url_for('main.friends_remove', username=uname, q=q) }}" style="display:inline;">
+            <button type="submit">Remove Friend</button>
+          </form>
+
+        {% elif uname in pending_out %}
+          
+          <form method="POST" action="{{ url_for('main.friends_cancel', to_username=uname, q=q) }}" style="display:inline;">
+            <button type="submit">Cancel Request</button>
+          </form>
+
+        {% elif uname in pending_in %}
+         
+          <form method="POST" action="{{ url_for('main.friends_accept', from_username=uname, q=q) }}" style="display:inline;">
+            <button type="submit">Accept</button>
+          </form>
+
+        {% else %}
+          
+          <form method="POST" action="{{ url_for('main.friends_request', username=uname, q=q) }}" style="display:inline;">
+            <button type="submit">Add Friend</button>
+          </form>
+        {% endif %}
+      </li>
+    {% endfor %}
+  </ul>
+{% elif q %}
+  <p class="error">No users found for "{{ q }}"</p>
 {% endif %}
+
+<hr>
+
+
+<h3>Your Friends</h3>
+{% if friends %}
+  <ul>
+    {% for uname in friends %}
+      <li>
+        {{ uname }}
+        <form method="POST" action="{{ url_for('main.friends_remove', username=uname) }}" style="display:inline;">
+          <button type="submit">Remove</button>
+        </form>
+      </li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <p>You don’t have any friends yet.</p>
+{% endif %}
+
+<hr>
+
+
+<h3>Friend Requests (Incoming)</h3>
+{% if pending_in %}
+  <ul>
+    {% for uname in pending_in %}
+      <li>
+        {{ uname }}
+        <form method="POST" action="{{ url_for('main.friends_accept', from_username=uname) }}" style="display:inline;">
+          <button type="submit">Accept</button>
+        </form>
+        <form method="POST" action="{{ url_for('main.friends_decline', from_username=uname) }}" style="display:inline;">
+          <button type="submit">Decline</button>
+        </form>
+      </li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <p>No incoming requests.</p>
+{% endif %}
+
+<hr>
+
+
+<h3>Friend Requests (Outgoing)</h3>
+{% if pending_out %}
+  <ul>
+    {% for uname in pending_out %}
+      <li>
+        {{ uname }}
+        <form method="POST" action="{{ url_for('main.friends_cancel', to_username=uname) }}" style="display:inline;">
+          <button type="submit">Cancel</button>
+        </form>
+      </li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <p>No outgoing requests.</p>
+{% endif %}
+
 {% endblock %}

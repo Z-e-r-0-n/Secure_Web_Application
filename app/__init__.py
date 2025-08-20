@@ -10,5 +10,4 @@ def create_app():
     app.config["SECRET_KEY"] = os.getenv("SECRET_KEY", "dev_secret")
     from .routes import main
     app.register_blueprint(main)
-
     return app

@@ -1,7 +1,7 @@
 
 import os
 import pymysql
-import pymysql.cursors
+import pymysql.cgursors
 
 conn = pymysql.connect(
     host=os.getenv("DB_HOST", "localhost"),
@@ -99,14 +99,13 @@ def get_messages(user1, user2):
 def get_profile(user_id):
     cursor.execute("SELECT username, email, first_name, last_name FROM users WHERE user_id = %s", (user_id,))
     return cursor.fetchone()
-    pass
 
 def friendsr(user1,user2):
     cursor.execute("Insert into requests (user1,user2,status) values (%s,%s,%s)", (user1, user2,"pending"))
     conn.commit()
     pass
 
-def frindsra(user1,user2):
+def friendsra(user1,user2):
     cursor.execute("update requests set status ='accepted' where (user1= %s and user2= %s)", (user1,user2))
     conn.commit()
 
@@ -116,6 +115,58 @@ def friendsch(user1,user2):
             return (True)
         else:
             return(False)
+        
+def friendse(username):
+    cursor.execute("""
+        SELECT user1, user2
+        FROM requests
+        WHERE status='accepted' AND (user1=%s OR user2=%s)
+    """, (username, username))
+    rows = cursor.fetchall()
+    friends = []
+    for u1, u2 in rows:
+        friend = u2 if u1 == username else u1
+        friends.append(friend)
+    return friends
+
+def requests(username):
+    cursor.execute("""
+        SELECT user2
+        FROM requests
+        WHERE user1=%s AND status='pending'
+    """, (username,))
+    return [r[0] for r in cursor.fetchall()]
+
+def requests_in(username):
+    cursor.execute("""
+        SELECT user1
+        FROM requests
+        WHERE user2=%s AND status='pending'
+    """, (username,))
+    return [r[0] for r in cursor.fetchall()]
+
+def friends_decline(user1, user2):
+    cursor.execute(
+        "DELETE FROM requests WHERE user1=%s AND user2=%s AND status='pending'",
+        (user1, user2),
+    )
+    conn.commit()
+
+def friends_cancel(user1, user2):
+    cursor.execute(
+        "DELETE FROM requests WHERE user1=%s AND user2=%s AND status='pending'",
+        (user1, user2),
+    )
+    conn.commit()
+
+def friends_remove(user1, user2):
+    cursor.execute(
+        "DELETE FROM requests WHERE status='accepted' AND ((user1=%s AND user2=%s) OR (user1=%s AND user2=%s))",
+        (user1, user2, user2, user1),
+    )
+    conn.commit()
+
+
 
 def get_all_tags_global():
     cursor.execute("SELECT DISTINCT tag_name FROM tags ORDER BY tag_name")
@@ -145,6 +196,29 @@ def get_global_issues(limit=10):
 def idkwhattoname( tag_name,limit=10):
     cursor.execute("SELECT i.issue_id, i.title, i.content, i.created_at FROM issues i JOIN tags t ON i.issue_id = t.issue_id WHERE t.tag_name = %s Limit %s", (tag_name , limit, ))
     return cursor.fetchall()
+
+def getusername(user_id):
+    cursor.execute("select username from users where user_id != %s",(user_id,))
+    return cursor.fetchall()#replaced remove at last
+
+
+def get_username_by_id(user_id):
+    cursor.execute("SELECT username FROM users WHERE user_id=%s", (user_id,))
+    row = cursor.fetchone()
+    return row[0] if row else None
+
+def search_users(query, exclude_username=None):
+    like = f"%{query}%"
+    if exclude_username:
+        cursor.execute(
+            "SELECT username FROM users WHERE username LIKE %s AND username != %s",
+            (like, exclude_username),
+        )
+    else:
+        cursor.execute("SELECT username FROM users WHERE username LIKE %s", (like,))
+    return [r[0] for r in cursor.fetchall()]
+
+
 
 
 
